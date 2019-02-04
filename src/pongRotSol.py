@@ -25,7 +25,7 @@ import queue
 import pongSimpleFunc as psfunc
 
 import os
-workdir = "./pongRot90/pongRotSolContTrain/"
+workdir = "./pongRot90/pongRotSol/"
 try:
     os.stat(workdir)
 except:
@@ -34,7 +34,7 @@ except:
 
 TotalSims=20 # batch size : How many simulations to accumulate before update the neuron network
 TotalBatch=10000 # number of batch to calculate
-option = '7580' # resize the figure 75X80 options are '4040', '7580','8080'
+option = '8075' # resize the figure 75X80 options are '4040', '7580','8080'
 gameoption = 'rot90' # gameoptions are 'rgb_array', 'rot90', 'rot90down14', 'human'
 
 
@@ -44,9 +44,9 @@ if (len(sys.argv) >=3 ):
     TotalBatch = sys.argv[2]
 
 resume = True # resume training from known sol
-resumecheck = True # resume training from previous checkpoint (from save.p  file)?
+resumecheck = False # resume training from previous checkpoint (from save.p  file)?
 render = False # render video output?
-rot=False # Add a rotation matrix at the last layer
+rot= True # Add a rotation matrix at the last layer
 
 # model initialization
 H = 200 # number of hidden layer neurons
@@ -118,6 +118,7 @@ while batchnum < TotalBatch:
     # stack together all inputs, hidden states, action gradients, and rewards for this episode
     
     epx = np.vstack(xs)
+    epx0 = np.vstack(xs)
     eph = np.vstack(hs)
     epdlogp = np.vstack(dlogps)
     epr = np.vstack(drs)

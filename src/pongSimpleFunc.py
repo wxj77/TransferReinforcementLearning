@@ -32,7 +32,7 @@ import pickle
 import gym
 #from gym import wrappers
 import queue
-
+#import matplotlib.pyplot as plt
 
 # hyperparameters to tune
 #H = 200 # number of hidden layer neurons
@@ -72,7 +72,7 @@ def prepro7580(I):
 
 def prepro8075(I):
     """ prepro 210x160x3 uint8 frame into 6000 (80x75) 1D float vector """
-    I = I[34:194,9:159,:] # crop - remove 34px from start & 16px from end of image in x, to reduce redundant parts of image (i.e. after ball passes paddle)
+    I = I[34:194,1:151,:] # crop - remove 34px from start & 16px from end of image in x, to reduce redundant parts of image (i.e. after ball passes paddle)
     I = I[::2,::2,0] # downsample by factor of 2.
     I[I == 144] = 0 # erase background (background type 1)
     I[I == 109] = 0 # erase background (background type 2)
