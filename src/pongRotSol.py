@@ -25,7 +25,7 @@ import queue
 import pongSimpleFunc as psfunc
 
 import os
-workdir = "./pongRotSolContTrain/"
+workdir = "./pongRot90/pongRotSolContTrain/"
 try:
     os.stat(workdir)
 except:
