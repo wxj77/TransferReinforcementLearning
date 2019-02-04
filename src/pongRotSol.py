@@ -19,13 +19,13 @@ import gym
 from gym import wrappers
 
 import time
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import threading
 import queue
 import pongSimpleFunc as psfunc
 
 import os
-workdir = "./pongRotSolNoTrain/"
+workdir = "./pongRotSolContTrain/"
 try:
     os.stat(workdir)
 except:
