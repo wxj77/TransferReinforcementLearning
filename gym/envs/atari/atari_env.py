@@ -129,7 +129,16 @@ class AtariEnv(gym.Env, utils.EzPickle):
             img_tmp[34:194,:,1] = np.transpose(img[34:194,:,1])
             img_tmp[34:194,:,2] = np.transpose(img[34:194,:,2])
             return img_tmp
-        
+        elif self._obs_type == 'rot90down14': # clockwise rotate 90 degree
+            img = self._get_image()
+            img_tmp=np.copy(img)
+            img_tmp[48:208,:,0] = np.transpose(img[34:194,:,0])
+            img_tmp[48:208,:,1] = np.transpose(img[34:194,:,1])
+            img_tmp[48:208,:,2] = np.transpose(img[34:194,:,2])
+            img_tmp[34:48,:,0] = 0
+            img_tmp[34:48,:,1] = 0
+            img_tmp[34:48,:,2] = 0
+            return img_tmp
 
     # return: (states, observations)
     def reset(self):
@@ -170,6 +179,16 @@ class AtariEnv(gym.Env, utils.EzPickle):
             img_tmp[34:194,:,1] = np.transpose(img[34:194,:,1])
             img_tmp[34:194,:,2] = np.transpose(img[34:194,:,2])
             return img_tmp
+        elif mode == 'rot90down14': # clockwise rotate 90 degree
+            img_tmp=np.copy(img)
+            img_tmp[48:208,:,0] = np.transpose(img[34:194,:,0])
+            img_tmp[48:208,:,1] = np.transpose(img[34:194,:,1])
+            img_tmp[48:208,:,2] = np.transpose(img[34:194,:,2])
+            img_tmp[34:48,:,0] = 0
+            img_tmp[34:48,:,1] = 0
+            img_tmp[34:48,:,2] = 0
+            return img_tmp
+
 
     def close(self):
         if self.viewer is not None:
