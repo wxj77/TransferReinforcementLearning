@@ -29,7 +29,7 @@ workdir = "./pongRot90/pongRotSol/"
 try:
     os.stat(workdir)
 except:
-    os.mkdir(workdir)   
+    os.makedirs(workdir)   
 
 
 TotalSims=20 # batch size : How many simulations to accumulate before update the neuron network
@@ -118,7 +118,7 @@ while batchnum < TotalBatch:
     # stack together all inputs, hidden states, action gradients, and rewards for this episode
     
     epx = np.vstack(xs)
-    epx0 = np.vstack(xs)
+#    epx0 = np.vstack(xs)
     eph = np.vstack(hs)
     epdlogp = np.vstack(dlogps)
     epr = np.vstack(drs)
