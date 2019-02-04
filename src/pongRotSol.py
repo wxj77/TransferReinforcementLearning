@@ -43,7 +43,8 @@ if (len(sys.argv) >=2 ):
 if (len(sys.argv) >=3 ):
     TotalBatch = sys.argv[2]
 
-resume = True # resume training from previous checkpoint (from save.p  file)?
+resume = True # resume training from known sol
+resumecheck = True # resume training from previous checkpoint (from save.p  file)?
 render = False # render video output?
 rot=False # Add a rotation matrix at the last layer
 
@@ -58,21 +59,23 @@ D = XLIM* YLIM # input dimensionality: 40x40 grid
 
 R = psfunc.rotate_clockwise(np.zeros( (XLIM, YLIM) )) 
 
-if resume:
-    model = pickle.load(open('save.p', 'rb'))
-    try:
+if resume:  
+    if resumecheck:
+        model = pickle.load(open(workdir+'/save.protnt', 'rb'))
         timelist =         np.load( workdir+"/timelist.npy")
         batchlist =      np.load( workdir+"/batchlist.npy")
         rewardlist =      np.load( workdir+"/rewardlist.npy")
-    except:
+    else:
+        model = pickle.load(open('save.p', 'rb'))
         print ("Create new files to record time/batch/reward of each training.")
         timelist = np.zeros((0))
         batchlist = np.zeros((0))
-        rewardlist = np.zeros((0))         
+        rewardlist = np.zeros((0))        
 else:
     model = {}
     model['W1'] = np.random.randn(H,D) / np.sqrt(D) # "Xavier" initialization - Shape will be H x D
     model['W2'] = np.random.randn(H) / np.sqrt(H) # Shape will be H
+    print ("Create new files to record time/batch/reward of each training.")
     timelist = np.zeros((0))
     batchlist = np.zeros((0))
     rewardlist = np.zeros((0))   

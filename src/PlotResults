@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Feb  3 20:02:03 2019
+
+@author: wei
+
+Plot results
+"""
+
+
+#Set Plot style
+from __future__ import print_function
+import os, sys, re, glob
+import time
+import numpy as np
+import scipy as sp
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+#import Image
+
+#https://matplotlib.org/1.5.1/users/customizing.html
+label_size = 20
+text_size =16
+mpl.rcParams['xtick.labelsize'] = label_size
+mpl.rcParams['ytick.labelsize'] = label_size
+mpl.rcParams['lines.linewidth'] = 2.5
+mpl.rcParams['font.size'] = 16
+mpl.rcParams['legend.fontsize'] = 16
+mpl.rcParams['figure.figsize']=8,6
+mpl.rcParams['figure.dpi']=150
+mpl.rcParams['savefig.dpi']=150
+mpl.rcParams['savefig.jpeg_quality']=95
+mpl.rcParams['savefig.format']='png'
+
+mpl.rcParams['figure.autolayout'] = False  # When True, automatically adjust subplot
+                            # parameters to make the plot fit the figure
+
+mpl.rcParams['figure.subplot.left']  = 0.18  # the left side of the subplots of the figure
+mpl.rcParams['figure.subplot.right']  = 0.85    # the right side of the subplots of the figure
+mpl.rcParams['figure.subplot.bottom']  = 0.15   # the bottom of the subplots of the figure
+mpl.rcParams['figure.subplot.top']  = 0.85     # the top of the subplots of the figure
+mpl.rcParams['figure.subplot.wspace']  = 0.2    # the amount of width reserved for blank space between subplots
+mpl.rcParams['figure.subplot.hspace']  = 0.2    # the amount of height reserved for white space between subplots
+
+
+
+
+
+
+
+
+
+
+
+############------Start plotting
+workdir = './pongRot90/'
+
+
+fignum=100
+
+#Fig 1 Training of Rot 90 degree
+fig = plt.figure(fignum)
+fignum+=1
+ax = fig.add_subplot(1,1,1)
+
+labellist = ['Random start', 'transfer known solution', 'transfer known solution and add rotation']
+folderlist = [ workdir + '/pongRotSolNoTrain/', workdir + '/pongRotSolContTrain/', workdir + '/pongRotSol/',]
+
+timelist = []
+batchlist = []
+rewardlist=[]
+dtlist = []
+dblist = []
+for ii in range(len(folderlist)):
+    timel = np.load(folderlist[ii]+'/timelist.npy')
+    dtimel = np.zeros_like(timel)
+    dtimel[0] = timel[0]
+    dtimel[1:] = np.diff(timel)
+    batchl = np.load(folderlist[ii]+'/batchlist.npy')
+    dbatchl = np.zeros_like(batchl)
+    dbatchl[0] = batchl[0]
+    dbatchl[1:] = np.diff(batchl)
+    timelist.append(timel)
+    batchlist.append(batchl)
+    reward = np.load(folderlist[ii]+'/rewardlist.npy')
+    rewardlist.append(reward)
+    dtlist.append(dtimel)
+    dblist.append(dbatchl)
+    
+
+for ii in range(len(folderlist)):
+    plt.plot(batchlist[ii], rewardlist[ii]/dblist[ii],
+            linestyle = '-',label=labellist[ii])
+
+
+
+#text="%.1f cm distance between \nthe anode grid and the cathodic grid"%(dist_ac)
+#ax.text(0.5,0.8, r"$log_{10}y=(%.3f)+(%.3f)*x$"%(best_vals[0], best_vals[1]), horizontalalignment='center', verticalalignment='center', transform=ax.transAxes)
+#ax.annotate(text, xy=(0.4, 0.8), xycoords='axes fraction', fontsize=label_size,
+#    bbox=dict(facecolor='white', alpha=0.8),
+#    horizontalalignment='left', verticalalignment='bottom')
+
+box = ax.get_position()
+ax.set_position([box.x0, box.y0, box.width, box.height*0.7])
+ax.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=1, mode="expand", borderaxespad=0.)
+
+
+ax.set_xlim(0,2000)
+#ax.set_ylim(0,6)
+
+ax.set_xlabel("# learning batches")
+ax.set_ylabel("avg. reward")
+
+ax.grid('on')
+
+plt.savefig(workdir+"RewardvsBatch.png")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
