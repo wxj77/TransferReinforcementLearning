@@ -1,8 +1,8 @@
 # Custom files
 src/tmp
-copy
-
-
+*copy*
+*frame*
+openaigym.*
 
 
 # Byte-compiled / optimized / DLL files

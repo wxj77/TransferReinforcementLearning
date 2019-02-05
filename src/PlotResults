@@ -81,9 +81,9 @@ for ii in range(len(folderlist)):
     dbatchl = np.zeros_like(batchl)
     dbatchl[0] = batchl[0]
     dbatchl[1:] = np.diff(batchl)
-    timelist.append(timel)
-    batchlist.append(batchl)
     reward = np.load(folderlist[ii]+'/rewardlist.npy')
+    timelist.append(timel)
+    batchlist.append(batchl)    
     rewardlist.append(reward)
     dtlist.append(dtimel)
     dblist.append(dbatchl)
@@ -92,14 +92,6 @@ for ii in range(len(folderlist)):
 for ii in range(len(folderlist)):
     plt.plot(batchlist[ii], rewardlist[ii]/dblist[ii],
             linestyle = '-',label=labellist[ii])
-
-
-
-#text="%.1f cm distance between \nthe anode grid and the cathodic grid"%(dist_ac)
-#ax.text(0.5,0.8, r"$log_{10}y=(%.3f)+(%.3f)*x$"%(best_vals[0], best_vals[1]), horizontalalignment='center', verticalalignment='center', transform=ax.transAxes)
-#ax.annotate(text, xy=(0.4, 0.8), xycoords='axes fraction', fontsize=label_size,
-#    bbox=dict(facecolor='white', alpha=0.8),
-#    horizontalalignment='left', verticalalignment='bottom')
 
 box = ax.get_position()
 ax.set_position([box.x0, box.y0, box.width, box.height*0.7])
@@ -117,6 +109,70 @@ ax.grid('on')
 
 plt.savefig(workdir+"RewardvsBatch.png")
 
+
+
+
+
+#Fig 1 Training of Rot 90 degree
+
+workdir = './BreakoutFromPong/'
+
+fig = plt.figure(fignum)
+fignum+=1
+ax = fig.add_subplot(1,1,1)
+
+labellist = ['Random start', 'transfer known solution and add rotation']
+#folderlist = [ workdir + '/pongRotSolNoTrain/', workdir + '/pongRotSol/',]
+folderlist = [ workdir + '/pongRotSolNoTrain1/', workdir + '/pongRotSol1/',]
+
+timelist = []
+batchlist = []
+rewardlist=[]
+dtlist = []
+dblist = []
+for ii in range(len(folderlist)):
+    timel = np.load(folderlist[ii]+'/timelist.npy')
+    timel = timel[0::10]
+    dtimel = np.zeros_like(timel)
+    dtimel[0] = timel[0]
+    dtimel[1:] = np.diff(timel)
+    batchl = np.load(folderlist[ii]+'/batchlist.npy')
+    batchl= batchl[0::10]
+    dbatchl = np.zeros_like(batchl)
+    dbatchl[0] = batchl[0]
+    dbatchl[1:] = np.diff(batchl)
+    reward = np.load(folderlist[ii]+'/rewardlist.npy')
+    rewardl = np.zeros_like(timel)
+    for ii in range(len(batchl)):
+        for jj in range(10):
+            rewardl[ii]+= reward[10*ii+jj]        
+    rewardl = rewardl/10.
+    timelist.append(timel)
+    batchlist.append(batchl)
+    rewardlist.append(rewardl)
+    dtlist.append(dtimel)
+    dblist.append(dbatchl)
+    
+
+for ii in range(len(folderlist)):
+    plt.plot(batchlist[ii], rewardlist[ii]/dblist[ii],
+            linestyle = '-',label=labellist[ii])
+
+box = ax.get_position()
+ax.set_position([box.x0, box.y0, box.width, box.height*0.7])
+ax.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+           ncol=1, mode="expand", borderaxespad=0.)
+
+
+#ax.set_xlim(0,2000)
+#ax.set_ylim(0,6)
+
+ax.set_xlabel("# learning batches")
+ax.set_ylabel("avg. reward")
+
+ax.grid('on')
+
+plt.savefig(workdir+"RewardvsBatch.png")
 
 
 
