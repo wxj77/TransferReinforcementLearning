@@ -85,7 +85,7 @@ rmsprop_cache = { k : np.zeros_like(v) for k,v in model.items() } # rmsprop memo
 
 
 env = gym.make("Breakout-v0")
-env = wrappers.Monitor(env, 'tmp2/breakout', force=True)
+#env = wrappers.Monitor(env, 'tmp2/breakout', force=True)
 #env._set_obs_type(gameoption )
 observation = env.reset()
 prev_x = None # used in computing the difference frame
