@@ -42,6 +42,8 @@ atari\_py: my custom revision of atari\_py from [openai atari_py](https://github
 ### Reference
 https://github.com/tensorpack/tensorpack.git
 https://github.com/tensorpack/tensorpack/tree/master/examples/DeepQNetwork/
+https://github.com/tensorpack/tensorpack/tree/master/examples/A3C/
+https://junyanz.github.io/CycleGAN/
 
 ### Tricks
 ./tensorpack/examples/DeepQNetwork/DQN.py --env ~/anaconda3/lib/python3.6/site-packages/atari_py/atari_roms/breakout.bin --task play --load DoubleDQN-Breakout.npz 

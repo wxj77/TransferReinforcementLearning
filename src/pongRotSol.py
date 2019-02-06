@@ -25,7 +25,7 @@ import queue
 import pongSimpleFunc as psfunc
 
 import os
-workdir = "./pongRot90/pongRotSol/"
+workdir = "./pongRot90/pongRotSol2/"
 try:
     os.stat(workdir)
 except:
@@ -85,7 +85,9 @@ rmsprop_cache = { k : np.zeros_like(v) for k,v in model.items() } # rmsprop memo
 
 
 env = gym.make("Pong-v0")
+#env = wrappers.Monitor(env, 'tmp/pong', force=True, render_mode=gameoption)
 env._set_obs_type(gameoption )
+
 observation = env.reset()
 prev_x = None # used in computing the difference frame
 xs,hs,dlogps,drs = [],[],[],[]

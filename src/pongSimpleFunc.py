@@ -310,6 +310,18 @@ def worker_breakout(env, q, model, NSims=1, option="4040", rot=False, return_hid
             observation, reward, done, info = env.step(1) # Fire the game  
             lives = info['ale.lives']
             print ("Restart game. Left %d lives"%(info['ale.lives']))
+
+            if  ( len(drs)>0 ):
+#        remove 0 rewards at the end
+#                while (((drs)[-1] == 0) ): 
+#                    xs.pop()
+#                    drs.pop() 
+#                    dlogps.pop() 
+#                    hs.pop()
+#                    if ( len(drs)==0 ):
+#                        break
+                drs[-1]=-1 # if the agenet died, reward -1
+                
     # preprocess the observation, set input to network to be difference image
         if ( option=="7580" ):
             cur_x = prepro7580(observation)
@@ -363,6 +375,21 @@ def worker_breakout(env, q, model, NSims=1, option="4040", rot=False, return_hid
             NSims-=1
             finish = finish and (info['ale.lives'] ==0 )
             print (finish)
+
+            if  ( len(drs)>0 ):
+#        remove 0 rewards at the end
+#                while (((drs)[-1] == 0) ): 
+#                    xs.pop()
+#                    drs.pop() 
+#                    dlogps.pop() 
+#                    hs.pop()
+#                    if ( len(drs)==0 ):
+#                        break
+ 
+                
+                drs[-1]=-1 # if the agenet died, reward -1
+                
+                
             if NSims<=0:
                 break
             

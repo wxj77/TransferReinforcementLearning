@@ -2,8 +2,9 @@
 src/tmp
 *copy*
 *frame*
-openaigym.*
-
+*openaigym.*
+./datasets/maps*
+*Datasets/maps*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

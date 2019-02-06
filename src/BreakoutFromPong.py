@@ -25,7 +25,7 @@ import queue
 import pongSimpleFunc as psfunc
 
 import os
-workdir = "./BreakoutFromPong/pongRotSolNoTrain1/"
+workdir = "./BreakoutFromPong/pongRotSolNegDiedReward1/"
 try:
     os.stat(workdir)
 except:
@@ -44,7 +44,7 @@ if (len(sys.argv) >=3 ):
     TotalBatch = sys.argv[2]
 
 resume = True # resume training from known sol
-resumecheck = True # resume training from previous checkpoint (from save.p  file)?
+resumecheck = False # resume training from previous checkpoint (from save.p  file)?
 render = False # render video output?
 rot= True # Add a rotation matrix at the last layer
 
@@ -85,6 +85,7 @@ rmsprop_cache = { k : np.zeros_like(v) for k,v in model.items() } # rmsprop memo
 
 
 env = gym.make("Breakout-v0")
+env = wrappers.Monitor(env, 'tmp2/breakout', force=True)
 #env._set_obs_type(gameoption )
 observation = env.reset()
 prev_x = None # used in computing the difference frame
@@ -109,6 +110,8 @@ while batchnum < TotalBatch:
     batchnum+=1
     if render: env.render()
 
+    
+    # get discounted reward from simulation
     xs, drs, dlogps, hs, finish = psfunc.worker_breakout(env, q, model, NSims=TotalSims, option=option, rot=rot)
     while not (q.empty() ):
         q.get()
@@ -118,21 +121,22 @@ while batchnum < TotalBatch:
     episode_number += 1
 
     # stack together all inputs, hidden states, action gradients, and rewards for this episode
-    
-    epx = np.vstack(xs)
+ 
+    if (len(xs) > 0 ): 
+        epx = np.vstack(xs)
 #    epx0 = np.vstack(xs)
-    eph = np.vstack(hs)
-    epdlogp = np.vstack(dlogps)
-    epr = np.vstack(drs)
+        eph = np.vstack(hs)
+        epdlogp = np.vstack(dlogps)
+        epr = np.vstack(drs)
     
-    
+
     # remove 0 rewards at the end
-    if (len(np.where(epr)[0]) > 0 ): 
-        eprlast = np.where(epr)[0][-1]
-        epx = epx[:eprlast+1]
-        eph = eph[:eprlast+1]
-        epdlogp = epdlogp[:eprlast+1]
-        epr = epr[:eprlast+1]
+
+#        eprlast = np.where(epr)[0][-1]
+#        epx = epx[:eprlast+1]
+#        eph = eph[:eprlast+1]
+#        epdlogp = epdlogp[:eprlast+1]
+#        epr = epr[:eprlast+1]
         if rot:    
             epx = np.dot(R, epx.transpose()).transpose()
     
@@ -161,7 +165,7 @@ while batchnum < TotalBatch:
     endtime=time.time()
     timelist = np.concatenate( (timelist, np.array([endtime-starttime+offsettime])) )
     batchlist = np.concatenate( ( batchlist, np.array([TotalSims*episode_number+offsetepisode])) )
-    rewardlist = np.concatenate( ( rewardlist, np.array([np.array(drs).sum()])) )
+    rewardlist = np.concatenate( ( rewardlist, np.array([np.array(drs).sum()+5])) )
     
  #   print (timelist)
  #   print (batchlist)
