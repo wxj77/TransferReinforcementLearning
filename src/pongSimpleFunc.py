@@ -32,7 +32,7 @@ functions used to get a simple solution for the atari games, which include
 # bar (right):,152:160,: length 8 = 
 # bar bottom: 189:193 width 4 length 16 = 115-99
 # ball : length 4X2 = (99-95)X(62-60) or (97-93)X(60-58)
-import cv2
+#import cv2
 
 
 import numpy as np
