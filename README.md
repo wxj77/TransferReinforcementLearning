@@ -62,13 +62,23 @@ http://models.tensorpack.com/OpenAIGym/
 
 
 
-# Tricks ffmpeg
+### Tricks ffmpeg
 ffmpeg -i input.mkv -codec copy output.mp4
 
 mkdir frames
 #ffmpeg -i input.mp4 -vf scale=320:-1:flags=lanczos,fps=10 frames/ffout%05d.png
 ffmpeg -i input.mp4 -vf fps=10 frames/ffout%05d.png
 convert -delay 5 -loop 0 frames/ffout*.png output.gif
+
+### Tricks pix2pix
+python tools/process.py --input_dir ../train/origin/input_dir/   --operation resize --output_dir ../train/resize/input_dir/; 
+python tools/process.py --input_dir ../train/origin/b_dir/   --operation resize --output_dir ../train/resize/b_dir/; 
+for f in ../train/resize/b_dir/*; do mv $f ${f/out/in}; done
+python tools/process.py   --input_dir ../train/resize/input_dir/   --b_dir ../train/resize/b_dir/   --operation combine   --output_dir ../train/combined
+
+python tools/split.py   --dir ../train/combined
+
+python pix2pix.py --mode train --output_dir f_train --max_epochs 200 --input_dir train  --which_direction BtoA
 
 # References
 A3C: https://arxiv.org/pdf/1602.01783.pdf
