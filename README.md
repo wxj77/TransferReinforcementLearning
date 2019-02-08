@@ -78,7 +78,7 @@ python tools/process.py   --input_dir ../train/resize/input_dir/   --b_dir ../tr
 
 python tools/split.py   --dir ../train/combined
 
-python pix2pix.py --mode train --output_dir f_train --max_epochs 200 --input_dir train  --which_direction BtoA
+python pix2pix.py --mode train --output_dir ../train/f_train --max_epochs 200 --input_dir ../train/combined/train  --which_direction BtoA
 
 # References
 A3C: https://arxiv.org/pdf/1602.01783.pdf
